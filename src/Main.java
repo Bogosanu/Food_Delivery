@@ -1,6 +1,3 @@
-package Tema_PAO;
-
-
 
 import java.util.Scanner;
 
