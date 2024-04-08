@@ -5,8 +5,8 @@ public class driver extends user{
     private String license_plate;
     private String car_model;
 
-    public driver(String first_name, String last_name, String phone_number) {
-        super(first_name, last_name, phone_number);
+    public driver(user usr) {
+        super(usr.getFirst_name(), usr.getLast_name(), usr.getPhone_number());
     }
 
     public String getLicense_plate() {

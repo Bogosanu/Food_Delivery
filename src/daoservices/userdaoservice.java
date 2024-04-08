@@ -59,6 +59,7 @@ public class userdaoservice {
                 case customer cst -> customerDao.create(cst);
                 default -> throw new IllegalStateException("Unexpected value: " + usr);
             }
+            System.out.println("User successfully added");
         }
     }
 

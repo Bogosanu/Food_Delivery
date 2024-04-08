@@ -5,8 +5,8 @@ public class customer extends user{
     private boolean adult;
     private String address;
 
-    public customer(String first_name, String last_name, String phone_number) {
-        super(first_name, last_name, phone_number);
+    public customer(user usr) {
+        super(usr.getFirst_name(), usr.getLast_name(), usr.getPhone_number());
     }
 
     public boolean isAdult() {
