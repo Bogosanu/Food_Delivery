@@ -8,6 +8,14 @@ import java.util.Scanner;
 public class product_service {
     private productdaoservice databaseService;
 
+    public productdaoservice getDatabaseService() {
+        return databaseService;
+    }
+
+    public void setDatabaseService(productdaoservice databaseService) {
+        this.databaseService = databaseService;
+    }
+
     public product_service(){
         this.databaseService = new productdaoservice();
     }
@@ -68,8 +76,6 @@ public class product_service {
         } else {
             adultonly = false;
         }
-
-        product p_info = new product(name, adultonly, price, weight);
         p.setName(name);
         p.setAdultsonly(adultonly);
         p.setPrice(price);

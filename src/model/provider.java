@@ -17,7 +17,15 @@ public class provider {
         this.name = name;
         this.phone_number = phone_number;
         this.address = address;
-        this.available_products = new HashSet<product>();
+        this.available_products = available_products;
+    }
+
+    public HashSet<product> getAvailable_products() {
+        return available_products;
+    }
+
+    public void setAvailable_products(HashSet<product> available_products) {
+        this.available_products = available_products;
     }
 
     public String getName() {

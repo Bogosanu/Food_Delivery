@@ -10,6 +10,14 @@ import java.util.Scanner;
 public class user_service {
     private userdaoservice databaseService;
 
+    public userdaoservice getDatabaseService() {
+        return databaseService;
+    }
+
+    public void setDatabaseService(userdaoservice databaseService) {
+        this.databaseService = databaseService;
+    }
+
     public user_service(){
         this.databaseService = new userdaoservice();
     }
