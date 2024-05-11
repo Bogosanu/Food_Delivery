@@ -1,60 +1,61 @@
 package service;
 
-import daoservices.productdaoservice;
-import daoservices.providerdaoservice;
-import model.product;
-import model.provider;
+import daoservices.ProductDaoService;
+import daoservices.ProviderDaoService;
+import model.Product;
+import model.Provider;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class provider_service {
+public class ProviderService {
 
-    private providerdaoservice databaseService;
-    private productdaoservice databaseproductService;
+    private ProviderDaoService databaseService;
+    private ProductDaoService databaseproductService;
 
-    public providerdaoservice getDatabaseService() {
+    public ProviderDaoService getDatabaseService() {
         return databaseService;
     }
 
-    public void setDatabaseService(providerdaoservice databaseService) {
+    public void setDatabaseService(ProviderDaoService databaseService) {
         this.databaseService = databaseService;
     }
 
-    public productdaoservice getDatabaseproductService() {
+    public ProductDaoService getDatabaseproductService() {
         return databaseproductService;
     }
 
-    public void setDatabaseproductService(productdaoservice databaseproductService) {
+    public void setDatabaseproductService(ProductDaoService databaseproductService) {
         this.databaseproductService = databaseproductService;
     }
 
-    public provider_service(){
-        this.databaseService = new providerdaoservice();
+    public ProviderService() throws SQLException {
+        this.databaseService = new ProviderDaoService();
     }
 
 
-    public void create(Scanner scanner){
+    public void create(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name: ");
         String name = scanner.nextLine();
         System.out.println("Enter provider phone number: ");
         String phoneNumber = scanner.nextLine();
         System.out.println("Enter provider address: ");
         String address = scanner.nextLine();
+        Provider prov = new Provider(name, phoneNumber, address);
+        databaseService.addprovider(prov);
         System.out.println("How many available product types does this provider have?");
-        HashSet<product> products = new HashSet<product>();
+        HashSet<Product> products = new HashSet<Product>();
         int n = scanner.nextInt();
         scanner.nextLine();
         for(int i = 0; i < n; ++i)
-            products.add(add_product(scanner));
-
-        provider prov = new provider(name, phoneNumber, address, products);
-        databaseService.addprovider(prov);
+            products.add(add_product(scanner, name));
         System.out.println("Provider created successfully");
+        prov.setAvailableProducts(products);
 
     }
 
-    public product add_product(Scanner scanner){
+    public Product add_product(Scanner scanner, String providerName) throws SQLException {
         System.out.println("Enter product name: ");
         String name = scanner.nextLine();
         System.out.println("Enter product price: ");
@@ -72,31 +73,33 @@ public class provider_service {
             adultonly = false;
         }
 
-        product p = new product(name, adultonly, price, weight);
-        databaseproductService.addproduct(p);
+        Product p = new Product(name, adultonly, price, weight);
+        p.setProviderName(providerName);
+
+        //Provider prov = databaseService.getproviderByName(providerName);
+        //prov.addAvailable_product(p);
+        databaseproductService.addproduct(p, providerName);
         System.out.println("Product created successfully\n");
         return p;
     }
 
-    public void read(Scanner scanner){
+    public void read(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name");
         String name = scanner.nextLine();
         databaseService.getproviderByName(name);
     }
 
-    public void delete(Scanner scanner){
+    public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name");
         String name = scanner.nextLine();
-        provider prov = databaseService.getproviderByName(name);
-        for(product p : prov.getAvailable_products())
-            databaseproductService.removeproduct(p.getName()); //stergem intai toate produsele
+        Provider prov = databaseService.getproviderByName(name);
         databaseService.removeprovider(name);
     }
 
-    public void update(Scanner scanner){
+    public void update(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name");
         String name = scanner.nextLine();
-        provider prov = databaseService.getproviderByName(name);
+        Provider prov = databaseService.getproviderByName(name);
         if(prov == null) return;
         System.out.println("Enter new provider phone number: ");
         String phoneNumber = scanner.nextLine();
@@ -104,20 +107,18 @@ public class provider_service {
         System.out.println("Enter new provider address: ");
         String address = scanner.nextLine();
 
+        databaseService.removeprovider(name);
+        prov.setPhoneNumber(phoneNumber);
+        prov.setAddress(address);
+        databaseService.addprovider(prov);
         System.out.println("How many available product types does this provider have?");
         int n = scanner.nextInt();
         scanner.nextLine();
-
-        for(product p : prov.getAvailable_products())
-            databaseproductService.removeproduct(p.getName());  //stergem produsele vechi din baza de date
-
-        HashSet<product> products = new HashSet<product>();
+        HashSet<Product> products = new HashSet<Product>();
         for(int i = 0; i < n; ++i)
-            products.add(add_product(scanner));
-        prov.setPhone_number(phoneNumber);
-        prov.setAddress(address);
-        prov.setAvailable_products(products);
+            products.add(add_product(scanner, name));
 
+        prov.setAvailableProducts(products);
     }
 
 

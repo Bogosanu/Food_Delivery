@@ -1,19 +1,55 @@
 
-import service.order_service;
-import service.product_service;
-import service.provider_service;
-import service.user_service;
+import service.OrderService;
+import service.ProductService;
+import service.ProviderService;
+import service.UserService;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    private static user_service userService = new user_service();
-    private static product_service productService = new product_service();
-    private static provider_service providerService = new provider_service();
-    private static order_service orderService = new order_service();
+    private static UserService userService;
 
-    public static void main(String[] args) {
+    static {
+        try {
+            userService = new UserService();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ProductService productService;
+
+    static {
+        try {
+            productService = new ProductService();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ProviderService providerService;
+
+    static {
+        try {
+            providerService = new ProviderService();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static OrderService orderService;
+
+    static {
+        try {
+            orderService = new OrderService();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) throws SQLException {
 
 
 
@@ -25,7 +61,7 @@ public class Main {
         mainMenu();
     }
 
-    private static void mainMenu() {
+    private static void mainMenu() throws SQLException {
         while (true) {
             System.out.println("\n=== Main Menu ===");
             System.out.println("1. Users");
@@ -58,7 +94,7 @@ public class Main {
         }
     }
 
-    private static void userMenu() {
+    private static void userMenu() throws SQLException {
         String choice;
         do {
             System.out.println("\n--- User Operations ---");
@@ -91,40 +127,36 @@ public class Main {
         } while (!choice.equals("5"));
     }
 
-    private static void productMenu() {
+    private static void productMenu() throws SQLException {
         String choice;
         do {
             System.out.println("\n--- Product Operations ---");
-            System.out.println("1. Create Product");
-            System.out.println("2. Read Product");
-            System.out.println("3. Update Product");
-            System.out.println("4. Delete Product");
-            System.out.println("5. Back");
+            System.out.println("1. Read Product");
+            System.out.println("2. Update Product");
+            System.out.println("3. Delete Product");
+            System.out.println("4. Back");
             System.out.print("Enter your choice: ");
             choice = scanner.nextLine();
 
             switch (choice) {
                 case "1":
-                    productService.create(scanner);
-                    break;
-                case "2":
                     productService.read(scanner);
                     break;
-                case "3":
+                case "2":
                     productService.update(scanner);
                     break;
-                case "4":
+                case "3":
                     productService.delete(scanner);
                     break;
-                case "5":
+                case "4":
                     return;
                 default:
-                    System.out.println("Invalid choice. Please choose a valid operation or 5 to go back.");
+                    System.out.println("Invalid choice. Please choose a valid operation or 4 to go back.");
             }
-        } while (!choice.equals("5"));
+        } while (!choice.equals("4"));
     }
 
-    private static void providerMenu() {
+    private static void providerMenu() throws SQLException {
         String choice;
         do {
             System.out.println("\n--- Provider Operations ---");
@@ -157,7 +189,7 @@ public class Main {
         } while (!choice.equals("5"));
     }
 
-    private static void orderMenu() {
+    private static void orderMenu() throws SQLException {
         String choice;
         do {
             System.out.println("\n--- Order Operations ---");

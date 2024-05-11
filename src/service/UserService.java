@@ -1,35 +1,36 @@
 package service;
 
-import daoservices.userdaoservice;
-import model.customer;
-import model.driver;
-import model.user;
+import daoservices.UserDaoService;
+import model.Customer;
+import model.Driver;
+import model.User;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
-public class user_service {
-    private userdaoservice databaseService;
+public class UserService {
+    private UserDaoService databaseService;
 
-    public userdaoservice getDatabaseService() {
+    public UserDaoService getDatabaseService() {
         return databaseService;
     }
 
-    public void setDatabaseService(userdaoservice databaseService) {
+    public void setDatabaseService(UserDaoService databaseService) {
         this.databaseService = databaseService;
     }
 
-    public user_service(){
-        this.databaseService = new userdaoservice();
+    public UserService() throws SQLException {
+        this.databaseService = new UserDaoService();
     }
 
-    public void create(Scanner scanner){
+    public void create(Scanner scanner) throws SQLException {
         System.out.println("Enter type of user [customer/driver]:");
         String type = scanner.nextLine().toLowerCase();
         if(!type_valid(type)) { return; }
         userInit(scanner, type);
     }
 
-    public void read(Scanner scanner){
+    public void read(Scanner scanner) throws SQLException {
         System.out.println("Enter user first name: ");
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
@@ -38,7 +39,7 @@ public class user_service {
         databaseService.getDriverByName(first_name, last_name);
     }
 
-    public void delete(Scanner scanner){
+    public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter user first name: ");
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
@@ -49,7 +50,7 @@ public class user_service {
         databaseService.removeUser(type, first_name, last_name);
     }
 
-    public void update(Scanner scanner){
+    public void update(Scanner scanner) throws SQLException {
         System.out.println("Enter the user type:");
         String type = scanner.nextLine();
         if(!type_valid(type)) { return; }
@@ -57,18 +58,22 @@ public class user_service {
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
         String last_name = scanner.nextLine();
-        user usr = databaseService.getUser(type, first_name, last_name);
+        User usr = databaseService.getUser(type, first_name, last_name);
         if(usr == null) { return; }
 
-        user usrinfo = setInfo(first_name, last_name, scanner);
-        usr.setFirst_name(first_name);
-        usr.setLast_name(last_name);
-        usr.setPhone_number(usrinfo.getPhone_number());
+        User usrinfo = setInfo(first_name, last_name, scanner);
+        usr.setFirstName(first_name);
+        usr.setLastName(last_name);
+        usr.setPhoneNumber(usrinfo.getPhoneNumber());
         if(type.equals("customer")){
-            customerInit(scanner, (customer) usr);
+            customerInit(scanner, (Customer) usr);
+            databaseService.removeUser(type, first_name, last_name);
+            databaseService.addUser(usr);
         }
         else{
-            driverInit(scanner, (driver) usr);
+            driverInit(scanner, (Driver) usr);
+            databaseService.removeUser(type, first_name, last_name);
+            databaseService.addUser(usr);
         }
 
     }
@@ -82,7 +87,7 @@ public class user_service {
     }
 
 
-    private void userInit(Scanner scanner, String type){
+    private void userInit(Scanner scanner, String type) throws SQLException {
         System.out.println("Enter user first name: ");
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
@@ -91,14 +96,14 @@ public class user_service {
         if (type.equals("customer") && databaseService.getCustomerByName(first_name, last_name) != null) {return;}
         if (type.equals("driver") && databaseService.getDriverByName(first_name, last_name) != null) {return;}
 
-        user usr = setInfo(first_name, last_name, scanner);
+        User usr = setInfo(first_name, last_name, scanner);
 
         if(type.equals("customer")){
-            customer cst = new customer(usr);
+            Customer cst = new Customer(usr);
             customerInit(scanner, cst);
             usr = cst;
         } else {
-            driver drv = new driver(usr);
+            Driver drv = new Driver(usr);
             driverInit(scanner, drv);
             usr = drv;
         }
@@ -108,24 +113,24 @@ public class user_service {
     }
 
 
-    private user setInfo(String first_name, String last_name, Scanner scanner){
+    private User setInfo(String first_name, String last_name, Scanner scanner){
         System.out.println("Enter phone number:");
         String phoneNumber = scanner.nextLine();
-        return new user(first_name, last_name, phoneNumber);
+        return new User(first_name, last_name, phoneNumber);
     }
 
-    private void driverInit(Scanner scanner, driver drv){
+    private void driverInit(Scanner scanner, Driver drv){
         System.out.println("Enter car license plate:");
         String license_plate = scanner.nextLine();
         System.out.println("Enter car model:");
         String car_model = scanner.nextLine();
 
-        drv.setCar_model(car_model);
-        drv.setLicense_plate(license_plate);
+        drv.setCarModel(car_model);
+        drv.setLicensePlate(license_plate);
 
     }
 
-    private void customerInit(Scanner scanner, customer cst){
+    private void customerInit(Scanner scanner, Customer cst){
         System.out.println("Enter your address:");
         String address = scanner.nextLine();
         System.out.println("Are you an adult?[yes/no]");

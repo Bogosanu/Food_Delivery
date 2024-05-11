@@ -1,12 +1,12 @@
 package model;
 
-public class customer extends user{
+public class Customer extends User {
 
     private boolean adult;
     private String address;
 
-    public customer(user usr) {
-        super(usr.getFirst_name(), usr.getLast_name(), usr.getPhone_number());
+    public Customer(User usr) {
+        super(usr.getFirstName(), usr.getLastName(), usr.getPhoneNumber());
     }
 
     public boolean isAdult() {

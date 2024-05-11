@@ -1,64 +1,65 @@
 package service;
 
 import daoservices.*;
-import daoservices.orderdaoservice;
+import daoservices.OrderDaoService;
 import model.*;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class order_service {
+public class OrderService {
     
-    private orderdaoservice databaseService;
-    private userdaoservice dbuserService;
+    private OrderDaoService databaseService;
+    private UserDaoService dbuserService;
 
-    private providerdaoservice dbprvService;
+    private ProviderDaoService dbprvService;
 
-    private productdaoservice dbproService;
+    private ProductDaoService dbproService;
 
-    public orderdaoservice getDatabaseService() {
+    public OrderDaoService getDatabaseService() {
         return databaseService;
     }
 
-    public void setDatabaseService(orderdaoservice databaseService) {
+    public void setDatabaseService(OrderDaoService databaseService) {
         this.databaseService = databaseService;
     }
 
-    public userdaoservice getDbuserService() {
+    public UserDaoService getDbuserService() {
         return dbuserService;
     }
 
-    public void setDbuserService(userdaoservice dbuserService) {
+    public void setDbuserService(UserDaoService dbuserService) {
         this.dbuserService = dbuserService;
     }
 
-    public providerdaoservice getDbprvService() {
+    public ProviderDaoService getDbprvService() {
         return dbprvService;
     }
 
-    public void setDbprvService(providerdaoservice dbprvService) {
+    public void setDbprvService(ProviderDaoService dbprvService) {
         this.dbprvService = dbprvService;
     }
 
-    public productdaoservice getDbproService() {
+    public ProductDaoService getDbproService() {
         return dbproService;
     }
 
-    public void setDbproService(productdaoservice dbproService) {
+    public void setDbproService(ProductDaoService dbproService) {
         this.dbproService = dbproService;
     }
 
-    public order_service(){
-        this.databaseService = new orderdaoservice();
+    public OrderService() throws SQLException {
+        this.databaseService = new OrderDaoService();
     }
 
-    public void create(Scanner scanner) {
+    public void create(Scanner scanner) throws SQLException {
         System.out.println("Enter customer first name: ");
         String cst_first_name = scanner.nextLine();
         System.out.println("Enter customer last name: ");
         String cst_last_name = scanner.nextLine();
 
-        customer c = dbuserService.getCustomerByName(cst_first_name, cst_last_name);
+        Customer c = dbuserService.getCustomerByName(cst_first_name, cst_last_name);
         if(c == null) return;
 
         System.out.println("Enter driver first name: ");
@@ -66,25 +67,25 @@ public class order_service {
         System.out.println("Enter driver last name: ");
         String drv_last_name = scanner.nextLine();
 
-        driver d = dbuserService.getDriverByName(drv_first_name, drv_last_name);
+        Driver d = dbuserService.getDriverByName(drv_first_name, drv_last_name);
         if(d == null) return;
 
         System.out.println("Enter provider name: ");
         String prv_name = scanner.nextLine();
 
-        provider prv = dbprvService.getproviderByName(prv_name);
+        Provider prv = dbprvService.getproviderByName(prv_name);
         if(prv == null) return;
 
         System.out.println("Enter product count: ");
         int n = scanner.nextInt();
         scanner.nextLine();
-        ArrayList<product> order_products = new ArrayList<product>();
+        ArrayList<Product> order_products = new ArrayList<Product>();
         for(int i = 0; i < n; ++i){
             System.out.println("Product name: ");
             String pro_name = scanner.nextLine();
-            product pro = dbproService.getproductByName(pro_name);
+            Product pro = dbproService.getproductByName(pro_name, prv_name);
             boolean in_provider_list = false;
-            for(product p : prv.getAvailable_products()){
+            for(Product p : prv.getAvailableProducts()){
                 if(p.getName().equals(pro.getName()))
                     in_provider_list = true;
             }
@@ -93,7 +94,7 @@ public class order_service {
                 i--;
                 continue;
             }
-            if(!c.isAdult() && pro.isAdultsonly()){
+            if(!c.isAdult() && pro.isAdultsOnly()){
                 System.out.println("Customer is not allowed by law to buy this product");
                 i--;
                 continue;
@@ -106,25 +107,23 @@ public class order_service {
         int nr = scanner.nextInt();
         scanner.nextLine();
 
-        order ord = new order(c, d, prv, order_products, nr);
+        Order ord = new Order(c, d, prv, nr);
         databaseService.addOrder(ord);
         System.out.println("Order created successfully");
     }
 
-    public void read(Scanner scanner){
+    public void read(Scanner scanner) throws SQLException {
         System.out.println("Enter order number");
         int nr = scanner.nextInt();
         scanner.nextLine();
         databaseService.getOrderByNumber(nr);
     }
 
-    public void delete(Scanner scanner){
+    public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter order number");
         int nr = scanner.nextInt();
         scanner.nextLine();
         databaseService.removeOrder(nr);
-
     }
 
-    //public void update(Scanner scanner){}
 }

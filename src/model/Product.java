@@ -1,19 +1,30 @@
 package model;
 
-public class product {
+public class Product {
     private String name;
-    private boolean adultsonly;
+    private boolean adultsOnly;
 
     private float price;
 
     private int weight;
 
-    public product(String name, boolean adultsonly, float price, int weight) {
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    private String providerName;
+
+    public Product(String name, boolean adultsOnly, float price, int weight) {
         this.name = name;
-        this.adultsonly = adultsonly;
+        this.adultsOnly = adultsOnly;
         this.price = price;
         this.weight = weight;
     }
+
 
     public String getName() {
         return name;
@@ -23,12 +34,12 @@ public class product {
         this.name = name;
     }
 
-    public boolean isAdultsonly() {
-        return adultsonly;
+    public boolean isAdultsOnly() {
+        return adultsOnly;
     }
 
-    public void setAdultsonly(boolean adultsonly) {
-        this.adultsonly = adultsonly;
+    public void setAdultsOnly(boolean adultsOnly) {
+        this.adultsOnly = adultsOnly;
     }
 
     public float getPrice() {

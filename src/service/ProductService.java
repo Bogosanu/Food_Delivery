@@ -1,26 +1,27 @@
 package service;
 
-import daoservices.productdaoservice;
-import model.product;
+import daoservices.ProductDaoService;
+import model.Product;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
-public class product_service {
-    private productdaoservice databaseService;
+public class ProductService {
+    private ProductDaoService databaseService;
 
-    public productdaoservice getDatabaseService() {
+    public ProductDaoService getDatabaseService() {
         return databaseService;
     }
 
-    public void setDatabaseService(productdaoservice databaseService) {
+    public void setDatabaseService(ProductDaoService databaseService) {
         this.databaseService = databaseService;
     }
 
-    public product_service(){
-        this.databaseService = new productdaoservice();
+    public ProductService() throws SQLException {
+        this.databaseService = new ProductDaoService();
     }
 
-    public void create(Scanner scanner) {
+    /*public void create(Scanner scanner) {
         System.out.println("Enter product name: ");
         String name = scanner.nextLine();
         System.out.println("Enter product price: ");
@@ -38,28 +39,33 @@ public class product_service {
             adultonly = false;
         }
 
-        product p = new product(name, adultonly, price, weight);
+        Product p = new Product(name, adultonly, price, weight);
         databaseService.addproduct(p);
         System.out.println("Product created successfully");
-    }
+    }*/
 
-    public void read(Scanner scanner){
+    public void read(Scanner scanner) throws SQLException {
         System.out.println("Enter product name");
         String name = scanner.nextLine();
-        databaseService.getproductByName(name);
+        System.out.println("Enter product provider name");
+        String providerName = scanner.nextLine();
+        databaseService.getproductByName(name, providerName);
     }
 
-    public void delete(Scanner scanner){
+    public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter product name");
         String name = scanner.nextLine();
-        databaseService.removeproduct(name);
-
+        System.out.println("Enter product provider name");
+        String providerName = scanner.nextLine();
+        databaseService.removeproduct(name, providerName);
     }
 
-    public void update(Scanner scanner){
+    public void update(Scanner scanner) throws SQLException {
         System.out.println("Enter product name");
         String name = scanner.nextLine();
-        product p = databaseService.getproductByName(name);
+        System.out.println("Enter product provider name");
+        String providerName = scanner.nextLine();
+        Product p = databaseService.getproductByName(name, providerName);
         if(p == null) return;
 
         System.out.println("Enter new product price: ");
@@ -77,9 +83,11 @@ public class product_service {
             adultonly = false;
         }
         p.setName(name);
-        p.setAdultsonly(adultonly);
+        p.setAdultsOnly(adultonly);
         p.setPrice(price);
         p.setWeight(weight);
+        databaseService.removeproduct(name, providerName);
+        databaseService.addproduct(p, providerName);
     }
 
 }
