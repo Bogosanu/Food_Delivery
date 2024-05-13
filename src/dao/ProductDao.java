@@ -42,12 +42,23 @@ public class ProductDao {
     }
 
     public void delete(Product p) throws SQLException {
+
+        String sql2 = "DELETE FROM food_delivery.orderproduct op WHERE op.productName = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sql2);) {
+            statement.setString(1, p.getName());
+            statement.executeUpdate();
+        }
+
+
+
         String sql = "DELETE FROM product p WHERE p.name = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setString(1, p.getName());
             statement.executeUpdate();
         }
+
     }
 
     public void create(Product p, String providerName) throws SQLException{

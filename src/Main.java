@@ -1,4 +1,5 @@
 
+import daoservices.OrderProductDaoService;
 import service.OrderService;
 import service.ProductService;
 import service.ProviderService;
@@ -51,12 +52,13 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-
+        OrderProductDaoService dbOrdProdService = new OrderProductDaoService();
 
         providerService.setDatabaseproductService(productService.getDatabaseService());
         orderService.setDbproService(productService.getDatabaseService());
         orderService.setDbprvService(providerService.getDatabaseService());
         orderService.setDbuserService(userService.getDatabaseService());
+        orderService.setDbOrdProdService(dbOrdProdService);
 
         mainMenu();
     }

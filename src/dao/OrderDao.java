@@ -21,7 +21,7 @@ public class OrderDao {
     }
 
     public Order read(int nr) throws SQLException {
-        String sql = "SELECT * FROM order o WHERE o.number = ?";
+        String sql = "SELECT * FROM food_delivery.order o WHERE o.number = ?";
         ResultSet rs = null;
         try(PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setInt(1, nr);
@@ -29,7 +29,7 @@ public class OrderDao {
             while (rs.next()){
                 model.Order o = new Order(rs.getInt("number"));
                 return o;
-            }
+        }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -42,17 +42,27 @@ public class OrderDao {
 
     public void delete(Order o) throws SQLException {
 
-        String sql = "DELETE FROM order o WHERE o.number = ?";
+        String sql2 = "DELETE FROM food_delivery.orderproduct op WHERE op.orderNumber = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sql2);) {
+            statement.setInt(1, o.getNumber());
+            statement.executeUpdate();
+        }
+
+
+
+        String sql = "DELETE FROM food_delivery.order o WHERE o.number = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setInt(1, o.getNumber());
             statement.executeUpdate();
         }
 
+
     }
 
     public void create(Order o) throws SQLException{
-        String sql = "INSERT INTO PROVIDER VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO food_delivery.order VALUES (?, ?, ?, ?, ?, ?);";
 
         try(PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setInt(1,  o.getNumber());

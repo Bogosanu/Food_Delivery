@@ -11,6 +11,9 @@ import java.util.ArrayList;
 public class OrderService {
     
     private OrderDaoService databaseService;
+
+
+    private OrderProductDaoService dbOrdProdService;
     private UserDaoService dbuserService;
 
     private ProviderDaoService dbprvService;
@@ -19,6 +22,10 @@ public class OrderService {
 
     public OrderDaoService getDatabaseService() {
         return databaseService;
+    }
+
+    public void setDbOrdProdService(OrderProductDaoService dbOrdProdService) {
+        this.dbOrdProdService = dbOrdProdService;
     }
 
     public void setDatabaseService(OrderDaoService databaseService) {
@@ -84,7 +91,7 @@ public class OrderService {
             System.out.println("Product name: ");
             String pro_name = scanner.nextLine();
             Product pro = dbproService.getproductByName(pro_name, prv_name);
-            boolean in_provider_list = false;
+            /*boolean in_provider_list = false;
             for(Product p : prv.getAvailableProducts()){
                 if(p.getName().equals(pro.getName()))
                     in_provider_list = true;
@@ -93,14 +100,22 @@ public class OrderService {
                 System.out.println("Product not found in provider's available products");
                 i--;
                 continue;
+            }*/
+            if(pro != null) {
+                if (!c.isAdult() && pro.isAdultsOnly()) {
+                    System.out.println("Customer is not allowed by law to buy this product");
+                    i--;
+                    continue;
+                }
+                order_products.add(pro);
             }
-            if(!c.isAdult() && pro.isAdultsOnly()){
-                System.out.println("Customer is not allowed by law to buy this product");
+            else{
                 i--;
-                continue;
             }
-            order_products.add(pro);
         }
+
+
+
 
 
         System.out.println("Enter order number");
@@ -109,6 +124,8 @@ public class OrderService {
 
         Order ord = new Order(c, d, prv, nr);
         databaseService.addOrder(ord);
+        for(Product prd : order_products)
+            dbOrdProdService.addOrderProduct(prd, ord);
         System.out.println("Order created successfully");
     }
 
