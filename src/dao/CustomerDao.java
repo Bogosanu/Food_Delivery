@@ -10,9 +10,17 @@ import java.util.ArrayList;
 public class CustomerDao {
 
     //private static ArrayList<Customer> customers = new ArrayList<>();
+    private static CustomerDao customerDao;
     private Connection connection = DatabaseConnection.getConnection();
 
-    public CustomerDao() throws SQLException {
+    private CustomerDao() throws SQLException {
+    }
+
+    public static CustomerDao getInstance() throws SQLException {
+        if(customerDao == null){
+            customerDao = new CustomerDao();
+        }
+        return customerDao;
     }
 
     public Customer read(String first_name, String last_name) throws SQLException {
@@ -40,7 +48,29 @@ public class CustomerDao {
         return null;
     }
 
+
+
+
+
     public void delete(Customer c) throws SQLException {
+
+        String sql3 = "DELETE op FROM orderproduct op JOIN food_delivery.order o ON o.number = op.orderNumber WHERE o.cstFirstName = ? AND o.cstLastName = ?";
+
+        try(PreparedStatement statement3 = connection.prepareStatement(sql3);) {
+            statement3.setString(1, c.getFirstName());
+            statement3.setString(2, c.getLastName());
+            statement3.executeUpdate();
+        }
+
+
+        String sql2 = "DELETE FROM food_delivery.order o WHERE o.cstFirstName = ? AND o.cstLastName = ?";
+
+        try(PreparedStatement statement2 = connection.prepareStatement(sql2);) {
+            statement2.setString(1, c.getFirstName());
+            statement2.setString(2, c.getLastName());
+            statement2.executeUpdate();
+        }
+
         String sql = "DELETE FROM customer c WHERE c.firstName = ? AND c.lastName = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sql);) {

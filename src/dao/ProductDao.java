@@ -14,9 +14,18 @@ import java.util.ArrayList;
 public class ProductDao {
     //private static ArrayList<Product> Products = new ArrayList<>();
 
+    private static ProductDao productDao;
     private Connection connection = DatabaseConnection.getConnection();
 
-    public ProductDao() throws SQLException {
+
+    private ProductDao() throws SQLException {
+    }
+
+    public static ProductDao getInstance() throws SQLException {
+        if(productDao == null){
+            productDao = new ProductDao();
+        }
+        return productDao;
     }
 
     public Product read(String name, String providerName) throws SQLException {

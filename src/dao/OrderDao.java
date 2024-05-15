@@ -15,19 +15,31 @@ public class OrderDao {
 
     //private static ArrayList<Order> Orders = new ArrayList<>();
 
+    private static OrderDao orderDao;
+
     private Connection connection = DatabaseConnection.getConnection();
 
-    public OrderDao() throws SQLException {
+    private OrderDao() throws SQLException {
+    }
+
+    public static OrderDao getInstance() throws SQLException {
+        if(orderDao == null){
+            orderDao = new OrderDao();
+        }
+        return orderDao;
     }
 
     public Order read(int nr) throws SQLException {
+        CustomerDao customerDao = CustomerDao.getInstance();
+        DriverDao driverDao = DriverDao.getInstance();
+        ProviderDao providerDao = ProviderDao.getInstance();
         String sql = "SELECT * FROM food_delivery.order o WHERE o.number = ?";
         ResultSet rs = null;
         try(PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setInt(1, nr);
             rs = statement.executeQuery();
             while (rs.next()){
-                model.Order o = new Order(rs.getInt("number"));
+                model.Order o = new Order(customerDao.read(rs.getString("cstFirstName"), rs.getString("cstLastName")), driverDao.read(rs.getString("drvFirstName"), rs.getString("drvLastName")), providerDao.read(rs.getString("providerName")), rs.getInt("number"));
                 return o;
         }
         } catch (SQLException e) {

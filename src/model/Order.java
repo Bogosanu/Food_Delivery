@@ -1,5 +1,8 @@
 package model;
 
+import daoservices.UserDaoService;
+import service.UserService;
+
 import java.util.ArrayList;
 
 public class Order {
@@ -20,6 +23,7 @@ public class Order {
         this.prv = prv;
         this.number = number;
     }
+
 
     public Order(int number) {
         this.number = number;

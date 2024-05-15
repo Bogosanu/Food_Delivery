@@ -2,6 +2,7 @@ package service;
 
 import daoservices.ProductDaoService;
 import daoservices.ProviderDaoService;
+import misc.FileManagement;
 import model.Product;
 import model.Provider;
 
@@ -44,6 +45,7 @@ public class ProviderService {
         String address = scanner.nextLine();
         Provider prov = new Provider(name, phoneNumber, address);
         databaseService.addprovider(prov);
+        FileManagement.scriereFisierChar("audit.csv", "create provider " + name);
         System.out.println("How many available product types does this provider have?");
         HashSet<Product> products = new HashSet<Product>();
         int n = scanner.nextInt();
@@ -79,6 +81,7 @@ public class ProviderService {
         //Provider prov = databaseService.getproviderByName(providerName);
         //prov.addAvailable_product(p);
         databaseproductService.addproduct(p, providerName);
+        FileManagement.scriereFisierChar("audit.csv", "create product " + name + " by " + providerName);
         System.out.println("Product created successfully\n");
         return p;
     }
@@ -86,13 +89,16 @@ public class ProviderService {
     public void read(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name");
         String name = scanner.nextLine();
-        databaseService.getproviderByName(name);
+        if(databaseService.getproviderByName(name) != null)
+            FileManagement.scriereFisierChar("audit.csv", "read provider " + name);
     }
 
     public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter provider name");
         String name = scanner.nextLine();
         Provider prov = databaseService.getproviderByName(name);
+        if(prov == null) return;
+        FileManagement.scriereFisierChar("audit.csv", "delete provider, all their products and all their orders " + name);
         databaseService.removeprovider(name);
     }
 
@@ -101,6 +107,7 @@ public class ProviderService {
         String name = scanner.nextLine();
         Provider prov = databaseService.getproviderByName(name);
         if(prov == null) return;
+        FileManagement.scriereFisierChar("audit.csv", "update provider " + name);
         System.out.println("Enter new provider phone number: ");
         String phoneNumber = scanner.nextLine();
 

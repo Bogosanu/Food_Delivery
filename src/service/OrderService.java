@@ -2,6 +2,7 @@ package service;
 
 import daoservices.*;
 import daoservices.OrderDaoService;
+import misc.FileManagement;
 import model.*;
 
 import java.sql.SQLException;
@@ -116,12 +117,10 @@ public class OrderService {
 
 
 
-
-
         System.out.println("Enter order number");
         int nr = scanner.nextInt();
         scanner.nextLine();
-
+        FileManagement.scriereFisierChar("audit.csv", "create order " + nr);
         Order ord = new Order(c, d, prv, nr);
         databaseService.addOrder(ord);
         for(Product prd : order_products)
@@ -133,13 +132,17 @@ public class OrderService {
         System.out.println("Enter order number");
         int nr = scanner.nextInt();
         scanner.nextLine();
-        databaseService.getOrderByNumber(nr);
+        if(databaseService.getOrderByNumber(nr) != null)
+            FileManagement.scriereFisierChar("audit.csv", "read order " + nr);
     }
 
     public void delete(Scanner scanner) throws SQLException {
         System.out.println("Enter order number");
         int nr = scanner.nextInt();
         scanner.nextLine();
+        if(databaseService.getOrderByNumber(nr) == null)
+            return;
+        FileManagement.scriereFisierChar("audit.csv", "delete order " + nr);
         databaseService.removeOrder(nr);
     }
 

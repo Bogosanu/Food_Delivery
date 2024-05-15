@@ -6,15 +6,20 @@ import model.Product;
 import java.sql.SQLException;
 
 public class ProductDaoService {
-    private ProductDao productDao;
+    private ProductDao productDao = ProductDao.getInstance();
 
     public ProductDaoService() throws SQLException {
-        this.productDao = new ProductDao();
     }
+
     public Product getproductByName(String name, String providerName) throws SQLException {
         Product p = productDao.read(name, providerName);
         if(p != null){
-            System.out.println(p);
+            System.out.println("Name: " + p.getName());
+            System.out.println("Provided by: " + providerName);
+            System.out.println("Price: " + p.getPrice());
+            System.out.println("Weight: " + p.getWeight());
+            if(p.isAdultsOnly())
+                System.out.println("Adult only product");
         }
         else{
             System.out.println("No product with this name");

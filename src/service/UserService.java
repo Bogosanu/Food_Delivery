@@ -4,7 +4,7 @@ import daoservices.UserDaoService;
 import model.Customer;
 import model.Driver;
 import model.User;
-
+import misc.FileManagement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -35,8 +35,8 @@ public class UserService {
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
         String last_name = scanner.nextLine();
-        databaseService.getCustomerByName(first_name, last_name);
-        databaseService.getDriverByName(first_name, last_name);
+        if(databaseService.getCustomerByName(first_name, last_name) != null || databaseService.getDriverByName(first_name, last_name) != null)
+            FileManagement.scriereFisierChar("audit.csv", "read user " + first_name + " " + last_name);
     }
 
     public void delete(Scanner scanner) throws SQLException {
@@ -47,6 +47,9 @@ public class UserService {
         System.out.println("Enter the user type:");
         String type = scanner.nextLine();
         if(!type_valid(type)) { return; }
+        User usr = databaseService.getUser(type, first_name, last_name);
+        if(usr == null) { return; }
+        FileManagement.scriereFisierChar("audit.csv", "delete user and all their orders" + first_name + " " + last_name);
         databaseService.removeUser(type, first_name, last_name);
     }
 
@@ -60,7 +63,7 @@ public class UserService {
         String last_name = scanner.nextLine();
         User usr = databaseService.getUser(type, first_name, last_name);
         if(usr == null) { return; }
-
+        FileManagement.scriereFisierChar("audit.csv", "update user " + first_name + " " + last_name);
         User usrinfo = setInfo(first_name, last_name, scanner);
         usr.setFirstName(first_name);
         usr.setLastName(last_name);
@@ -92,6 +95,8 @@ public class UserService {
         String first_name = scanner.nextLine();
         System.out.println("Enter user last name: ");
         String last_name = scanner.nextLine();
+
+        FileManagement.scriereFisierChar("audit.csv", "create user " + first_name + " " + last_name);
 
         if (type.equals("customer") && databaseService.getCustomerByName(first_name, last_name) != null) {return;}
         if (type.equals("driver") && databaseService.getDriverByName(first_name, last_name) != null) {return;}
@@ -128,6 +133,7 @@ public class UserService {
         drv.setCarModel(car_model);
         drv.setLicensePlate(license_plate);
 
+
     }
 
     private void customerInit(Scanner scanner, Customer cst){
@@ -142,5 +148,7 @@ public class UserService {
             cst.setAdult(false);
         }
         cst.setAddress(address);
+
+
     }
 }

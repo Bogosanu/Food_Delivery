@@ -6,15 +6,16 @@ import model.Provider;
 import java.sql.SQLException;
 
 public class ProviderDaoService {
-    private ProviderDao providerDao;
+    private ProviderDao providerDao = ProviderDao.getInstance();
 
     public ProviderDaoService() throws SQLException {
-        this.providerDao = new ProviderDao();
     }
     public Provider getproviderByName(String name) throws SQLException {
         Provider p = providerDao.read(name);
         if(p != null){
-            System.out.println(p);
+            System.out.println("Name: " + p.getName());
+            System.out.println("Location: " + p.getAddress());
+            System.out.println("Phone number: " + p.getPhoneNumber());
         }
         else{
             System.out.println("No provider with this name");

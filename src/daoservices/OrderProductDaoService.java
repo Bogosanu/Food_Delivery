@@ -10,10 +10,9 @@ import java.sql.SQLException;
 
 public class OrderProductDaoService {
 
-    private OrderProductDao orderProductDao;
+    private OrderProductDao orderProductDao = OrderProductDao.getInstance();
 
     public OrderProductDaoService() throws SQLException {
-        this.orderProductDao = new OrderProductDao();
     }
 
 

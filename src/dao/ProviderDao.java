@@ -10,9 +10,18 @@ import java.util.ArrayList;
 public class ProviderDao {
 
    // private static ArrayList<Provider> Providers = new ArrayList<>();
-   private Connection connection = DatabaseConnection.getConnection();
 
-    public ProviderDao() throws SQLException {
+    private static ProviderDao providerDao;
+    private Connection connection = DatabaseConnection.getConnection();
+
+    private ProviderDao() throws SQLException {
+    }
+
+    public static ProviderDao getInstance() throws SQLException {
+        if(providerDao == null){
+            providerDao = new ProviderDao();
+        }
+        return providerDao;
     }
 
     public Provider read(String name) throws SQLException {
@@ -36,6 +45,23 @@ public class ProviderDao {
     }
 
     public void delete(Provider p) throws SQLException {
+
+        String sql4 = "DELETE op FROM orderproduct op JOIN food_delivery.order o ON o.number = op.orderNumber WHERE o.providerName = ?";
+
+        try(PreparedStatement statement4 = connection.prepareStatement(sql4);) {
+            statement4.setString(1, p.getName());
+            statement4.executeUpdate();
+        }
+
+
+
+        String sql3 = "DELETE FROM food_delivery.order o WHERE o.providerName = ?";
+        try(PreparedStatement statement3 = connection.prepareStatement(sql3);) {
+            statement3.setString(1, p.getName());
+            statement3.executeUpdate();
+        }
+
+
         String sql2 = "DELETE FROM product p WHERE p.providerName = ?";
 
         try(PreparedStatement statement2 = connection.prepareStatement(sql2);) {

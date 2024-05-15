@@ -1,0 +1,18 @@
+create user Andrei Bogos;2024-05-15T23:23:42.259832700
+read user Andrei Bogos;2024-05-15T23:23:52.115593500
+create user Elena Mania;2024-05-15T23:24:01.520115300
+update user Elena Mania;2024-05-15T23:24:12.026018900
+create provider Aroma;2024-05-15T23:24:32.469500700
+update provider Aroma;2024-05-15T23:25:30.383999400
+create product Pizza by Aroma;2024-05-15T23:25:41.077209600
+create product Bere by Aroma;2024-05-15T23:25:47.595959
+read provider Aroma;2024-05-15T23:25:53.840758500
+read product Pizza by Aroma;2024-05-15T23:26:03.643620600
+read product Pizza by Aroma;2024-05-15T23:26:34.187089500
+update product Bere by Aroma;2024-05-15T23:26:41.264879300
+create order 1;2024-05-15T23:27:08.415594100
+read order 1;2024-05-15T23:27:11.500750900
+delete user Andrei Bogos;2024-05-15T23:27:47.186826600
+delete user Andrei Bogos;2024-05-15T23:37:16.389547200
+delete product Bere by Aroma;2024-05-15T23:39:22.730792800
+delete provider Aroma;2024-05-15T23:39:39.462135300

@@ -11,9 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OrderProductDao {
+
+    private static OrderProductDao orderProductDao;
     private Connection connection = DatabaseConnection.getConnection();
 
-    public OrderProductDao() throws SQLException {
+    private OrderProductDao() throws SQLException {
+    }
+
+    public static OrderProductDao getInstance() throws SQLException {
+        if(orderProductDao == null){
+            orderProductDao = new OrderProductDao();
+        }
+        return orderProductDao;
     }
 
     public OrderProduct read(int nr, String name) throws SQLException {
@@ -50,9 +59,6 @@ public class OrderProductDao {
 
     }
 
-    public void deleteFromOrder(Order o) throws SQLException {
-
-    }
 
     public void create(Product p, Order o) throws SQLException{
         String sql = "INSERT INTO food_delivery.orderproduct VALUES (?, ?);";

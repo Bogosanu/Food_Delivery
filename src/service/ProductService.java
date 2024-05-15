@@ -1,6 +1,7 @@
 package service;
 
 import daoservices.ProductDaoService;
+import misc.FileManagement;
 import model.Product;
 
 import java.sql.SQLException;
@@ -49,7 +50,8 @@ public class ProductService {
         String name = scanner.nextLine();
         System.out.println("Enter product provider name");
         String providerName = scanner.nextLine();
-        databaseService.getproductByName(name, providerName);
+        if(databaseService.getproductByName(name, providerName) != null)
+            FileManagement.scriereFisierChar("audit.csv", "read product " + name + " by " + providerName);
     }
 
     public void delete(Scanner scanner) throws SQLException {
@@ -57,6 +59,8 @@ public class ProductService {
         String name = scanner.nextLine();
         System.out.println("Enter product provider name");
         String providerName = scanner.nextLine();
+        if(databaseService.getproductByName(name, providerName) == null) return;
+        FileManagement.scriereFisierChar("audit.csv", "delete product " + name + " by " + providerName);
         databaseService.removeproduct(name, providerName);
     }
 
@@ -68,6 +72,7 @@ public class ProductService {
         Product p = databaseService.getproductByName(name, providerName);
         if(p == null) return;
 
+        FileManagement.scriereFisierChar("audit.csv", "update product " + name + " by " + providerName);
         System.out.println("Enter new product price: ");
         float price = scanner.nextFloat();
         scanner.nextLine();

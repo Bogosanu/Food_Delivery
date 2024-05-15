@@ -1,20 +1,24 @@
 package daoservices;
 
 import dao.OrderDao;
+import dao.OrderProductDao;
 import model.Order;
 
 import java.sql.SQLException;
 
 public class OrderDaoService {
 
-    private OrderDao orderDao;
+    private OrderDao orderDao = OrderDao.getInstance();
+    private OrderProductDao orderProductDao = OrderProductDao.getInstance();
     public OrderDaoService() throws SQLException {
-        this.orderDao = new OrderDao();
     }
     public Order getOrderByNumber(int nr) throws SQLException {
         Order o = orderDao.read(nr);
-        if(o != null){
-            System.out.println(o);
+        if(o != null) {
+            System.out.println("Order number: " + o.getNumber());
+            System.out.println("Customer: " + o.getCustomer().getFirstName() + " " + o.getCustomer().getLastName());
+            System.out.println("Driver: " + o.getDriver().getFirstName() + " " + o.getDriver().getLastName());
+            System.out.println("Provided by: " + o.getProvider().getName());
         }
         else{
             System.out.println("No order with this number");

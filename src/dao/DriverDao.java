@@ -10,12 +10,19 @@ import java.util.ArrayList;
 public class DriverDao {
 
     //private static ArrayList<Driver> drivers = new ArrayList<>();
+
+    private static DriverDao driverDao;
     private Connection connection = DatabaseConnection.getConnection();
 
-    public DriverDao() throws SQLException {
+    private DriverDao() throws SQLException {
     }
 
-
+    public static DriverDao getInstance() throws SQLException {
+        if(driverDao == null){
+            driverDao = new DriverDao();
+        }
+        return driverDao;
+    }
 
     public Driver read(String first_name, String last_name) throws SQLException {
         String sql = "SELECT * FROM driver d WHERE d.firstName = ? AND d.lastName = ?";
@@ -43,6 +50,25 @@ public class DriverDao {
     }
 
     public void delete(Driver d) throws SQLException {
+
+        String sql3 = "DELETE op FROM orderproduct op JOIN food_delivery.order o ON o.number = op.orderNumber WHERE o.cstFirstName = ? AND o.cstLastName = ?";
+
+        try(PreparedStatement statement3 = connection.prepareStatement(sql3);) {
+            statement3.setString(1, d.getFirstName());
+            statement3.setString(2, d.getLastName());
+            statement3.executeUpdate();
+        }
+
+
+        String sql2 = "DELETE FROM food_delivery.order o WHERE o.drvFirstName = ? AND o.drvLastName = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(sql2);) {
+            statement.setString(1, d.getFirstName());
+            statement.setString(2, d.getLastName());
+            statement.executeUpdate();
+        }
+
+
         String sql = "DELETE FROM driver d WHERE d.firstName = ? AND d.lastName = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(sql);) {

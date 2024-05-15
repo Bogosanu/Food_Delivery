@@ -10,18 +10,24 @@ import java.sql.SQLException;
 
 public class UserDaoService {
 
-    private CustomerDao customerDao;
-    private DriverDao driverDao;
+    private CustomerDao customerDao = CustomerDao.getInstance();
+    private DriverDao driverDao = DriverDao.getInstance();
 
     public UserDaoService() throws SQLException {
-        this.customerDao = new CustomerDao();
-        this.driverDao = new DriverDao();
     }
+
 
     public Customer getCustomerByName(String first_name, String last_name) throws SQLException {
         Customer c = customerDao.read(first_name, last_name);
         if(c != null){
-            System.out.println(c);
+            System.out.println("Name: " + c.getFirstName() + " " + c.getLastName());
+            System.out.println("Phone number: " + c.getPhoneNumber());
+            System.out.println("Address: " + c.getAddress());
+            if(c.isAdult())
+                System.out.println("Adult");
+            else
+                System.out.println("Minor");
+
         }
         else{
             System.out.println("No customer with this name");
@@ -32,7 +38,10 @@ public class UserDaoService {
     public Driver getDriverByName(String first_name, String last_name) throws SQLException {
         Driver d = driverDao.read(first_name, last_name);
         if(d != null){
-            System.out.println(d);
+            System.out.println("Name: " + d.getFirstName() + " " + d.getLastName());
+            System.out.println("Phone number: " + d.getPhoneNumber());
+            System.out.println("Car plate: " + d.getLicensePlate());
+            System.out.println("Car model: " + d.getCarModel());
         }
         else{
             System.out.println("No driver with this name");
