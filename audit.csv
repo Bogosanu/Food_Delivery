@@ -1,18 +1,29 @@
-create user Andrei Bogos;2024-05-15T23:23:42.259832700
-read user Andrei Bogos;2024-05-15T23:23:52.115593500
-create user Elena Mania;2024-05-15T23:24:01.520115300
-update user Elena Mania;2024-05-15T23:24:12.026018900
-create provider Aroma;2024-05-15T23:24:32.469500700
-update provider Aroma;2024-05-15T23:25:30.383999400
-create product Pizza by Aroma;2024-05-15T23:25:41.077209600
-create product Bere by Aroma;2024-05-15T23:25:47.595959
-read provider Aroma;2024-05-15T23:25:53.840758500
-read product Pizza by Aroma;2024-05-15T23:26:03.643620600
-read product Pizza by Aroma;2024-05-15T23:26:34.187089500
-update product Bere by Aroma;2024-05-15T23:26:41.264879300
-create order 1;2024-05-15T23:27:08.415594100
-read order 1;2024-05-15T23:27:11.500750900
-delete user Andrei Bogos;2024-05-15T23:27:47.186826600
-delete user Andrei Bogos;2024-05-15T23:37:16.389547200
-delete product Bere by Aroma;2024-05-15T23:39:22.730792800
-delete provider Aroma;2024-05-15T23:39:39.462135300
+delete user and all their ordersElena Mania;2024-05-16T13:41:32.627855500
+create user Andrei Petre;2024-05-16T14:24:53.768589300
+create user Bogdan Ivanescu;2024-05-16T14:25:20.421498200
+create user Mircea Botezatu;2024-05-16T14:25:58.075965200
+create user Mariana Georgescu;2024-05-16T14:26:40.419620800
+create user Lucian Brinza;2024-05-16T14:27:26.568114200
+create user Stefania Spataru;2024-05-16T14:28:29.986544600
+read user Stefania Spataru;2024-05-16T14:29:14.042985800
+read user Mircea Botezatu;2024-05-16T14:29:43.545044700
+create provider Koreanos;2024-05-16T14:30:57.193890900
+create product Sushi somon by Koreanos;2024-05-16T14:31:17.759003100
+create product Ramen by Koreanos;2024-05-16T14:31:42.164950700
+create product Sake by Koreanos;2024-05-16T14:31:56.933088
+update product Sake by Koreanos;2024-05-16T14:32:08.152130400
+create provider McDaisys;2024-05-16T14:33:45.076562800
+create product Burger vita by McDaisys;2024-05-16T14:34:14.294596300
+create product Cartofi prajiti(medie) by McDaisys;2024-05-16T14:34:42.277892600
+create product Cartofi prajiti(mica) by McDaisys;2024-05-16T14:34:52.952065600
+create product Popa Cola by McDaisys;2024-05-16T14:35:23.167618100
+create provider Burger Queen;2024-05-16T14:36:23.810283600
+create product Burger vita by Burger Queen;2024-05-16T14:37:04.643400300
+create product Burger pui by Burger Queen;2024-05-16T14:37:25.373823100
+create product Bere by Burger Queen;2024-05-16T14:37:53.859853400
+create product Ramen by Burger Queen;2024-05-16T14:38:06.647741100
+create order 1;2024-05-16T14:40:40.544063400
+create order 2;2024-05-16T14:41:34.913442300
+create order 3;2024-05-16T14:43:32.003410200
+read order 1;2024-05-16T14:43:36.431382200
+read order 2;2024-05-16T14:43:44.034726200
