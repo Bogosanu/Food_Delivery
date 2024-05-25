@@ -3,7 +3,7 @@ package model;
 import daoservices.UserDaoService;
 import service.UserService;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Order {
 
@@ -15,6 +15,8 @@ public class Order {
 
     private Provider prv;
 
+    private List <Product> products;
+
 
 
     public Order(Customer cst, Driver drv, Provider prv, int number) {
@@ -22,6 +24,7 @@ public class Order {
         this.drv = drv;
         this.prv = prv;
         this.number = number;
+        this.products = new ArrayList<>();
     }
 
 
@@ -60,5 +63,13 @@ public class Order {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public void addProduct(Product p){
+        this.products.add(p);
+    }
+
+    public void removeProduct(Product p){
+        boolean isRemoved = this.products.remove(p);
     }
 }

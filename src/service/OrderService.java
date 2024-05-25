@@ -122,9 +122,14 @@ public class OrderService {
         scanner.nextLine();
         FileManagement.scriereFisierChar("audit.csv", "create order " + nr);
         Order ord = new Order(c, d, prv, nr);
+        for(Product prd : order_products){
+            ord.addProduct(prd);
+            prd.addToOrder(nr);
+        }
         databaseService.addOrder(ord);
         for(Product prd : order_products)
             dbOrdProdService.addOrderProduct(prd, ord);
+
         System.out.println("Order created successfully");
     }
 

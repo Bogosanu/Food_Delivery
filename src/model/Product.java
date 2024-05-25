@@ -1,5 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Product {
     private String name;
     private boolean adultsOnly;
@@ -18,11 +22,14 @@ public class Product {
 
     private String providerName;
 
+    private List<Integer> ordersContaining;
+
     public Product(String name, boolean adultsOnly, float price, int weight) {
         this.name = name;
         this.adultsOnly = adultsOnly;
         this.price = price;
         this.weight = weight;
+        this.ordersContaining = new ArrayList<>();
     }
 
 
@@ -56,5 +63,14 @@ public class Product {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public void addToOrder(int nr){
+        this.ordersContaining.add(Integer.valueOf(nr));
+        Collections.sort(this.ordersContaining);
+    }
+
+    public void removeFromOrder(int nr){
+        boolean isRemoved = this.ordersContaining.remove(Integer.valueOf(nr));
     }
 }
